@@ -9,8 +9,8 @@ import java.sql.Statement;
 
 public class Jogador {
     private String nome;
-    private String senha1;
-    private String senha2;
+    private String senha;
+    private String conf_senha;
     private int senhaConvertida;
     
     public void setNome(String nome){
@@ -18,23 +18,25 @@ public class Jogador {
     }
           
     public String getNome() {
-        return this.nome;
+        return nome;
     }   
     
-    public void setSenha1(String senha1) {
-        this.senha1 = senha1;
+    public void setSenha(String senha) {
+        this.senha = senha;
+        this.senhaConvertida = senha.length();
+        setSenhaConvertida(senhaConvertida);
     }
     
-    public String getSenha1() {
-        return this.senha1;
+    public String getSenha() {
+        return senha;
     }
     
-    public void setSenha2(String senha2){
-        this.senha2 = senha2;
+    public void setConf_Senha(String conf_senha){
+        this.conf_senha = conf_senha;
     }
     
-    public String getSenha2() {
-        return this.senha2;
+    public String getConf_Senha() {
+        return conf_senha;
     }
     
     public void setSenhaConvertida(int senhaConvertida){
@@ -42,11 +44,11 @@ public class Jogador {
     }
     
     public int getSenhaConvertida() {
-        return this.senhaConvertida;
+        return senhaConvertida;
     }
     
     public void recebeDados() throws SQLException, NoSuchAlgorithmException{
-        if(!this.getSenha1().equals(this.getSenha2())) {//verifica se as variaveis senha1 e senha 2 sao iguais
+        if(!this.getSenha().equals(this.getConf_Senha())) {//verifica se as variaveis senha1 e senha 2 sao iguais
             System.out.println("SENHAS DIFERENTES");
         }else if(this.getSenhaConvertida() <= 7){//verifica se a senha é menor ou igual que 7
             System.out.println("Sua senha deve conter mais que 7 digitos");
@@ -55,15 +57,15 @@ public class Jogador {
             
             Statement st = con.conexao.createStatement();
             MessageDigest senhaCriptografada=MessageDigest.getInstance("MD5");//criptografa a senha
-            senhaCriptografada.update(this.getSenha1().getBytes(),0,this.getSenha1().length());//criptografa a senha
+            senhaCriptografada.update(this.getSenha().getBytes(),0,this.getSenha().length());//criptografa a senha
             st.executeUpdate("insert into jogador "+// insere no banco
             "(nome_jogador,senha)" +
             " values ('" + this.getNome() + "', '" + senhaCriptografada + "')");
              st.executeQuery("Select * from jogador");//Select na tabela jogador
             ResultSet rs = st.getResultSet();
-            while(rs.next()) {
-            System.out.println(rs.getString("nome_jogador"));//mostra os dados da tabela jogador no console
-            }
+            //while(rs.next()) {
+            //System.out.println(rs.getString("nome_jogador"));//mostra os dados da tabela jogador no console
+            //}
         }
     }
 }
