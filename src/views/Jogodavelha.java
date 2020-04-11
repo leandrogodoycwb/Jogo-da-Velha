@@ -42,9 +42,9 @@ public class Jogodavelha {
                 case 2:
                      System.out.println("Tela de Login\n");
                      System.out.println("Nome: ");
-                     login.setNome(nome.nextLine());
+                     jogador.setNome(nome.nextLine());
                      System.out.println("Senha: ");
-                     login.setSenha(senha.nextLine());
+                     jogador.setSenha(senha.nextLine());
                      login.Autenticar();
                     break;
                     
