@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Scanner;
 import static javafx.application.Platform.exit;
+import models.Cadastrar;
 import models.Logar;
 
 public class Jogodavelha {
@@ -17,6 +18,7 @@ public class Jogodavelha {
         Scanner senha = new Scanner(System.in);//instacia um objeto senha
         Scanner conf_senha = new Scanner(System.in);//instancia um objeto conf_senha
         Logar login = new Logar();
+        Cadastrar cadastro = new Cadastrar();
         
         
         int x = 0;
@@ -36,7 +38,7 @@ public class Jogodavelha {
                      jogador.setSenha(senha.nextLine());//joga a senha pra dentro do metodo SETSENHA1
                      System.out.println("Confirme sua senha: ");
                      jogador.setConf_Senha(conf_senha.nextLine());//joga a senha pra dentro do metoddo SETSENHA2
-                     jogador.recebeDados();
+                     cadastro.recebeDados(jogador);
                     break;
                     
                 case 2:
@@ -45,7 +47,7 @@ public class Jogodavelha {
                      jogador.setNome(nome.nextLine());
                      System.out.println("Senha: ");
                      jogador.setSenha(senha.nextLine());
-                     login.Autenticar();
+                     login.Autenticar(jogador);
                     break;
                     
                 case 3:

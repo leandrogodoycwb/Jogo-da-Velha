@@ -21,7 +21,7 @@ public class Jogar {
         int valida = 0, jogada = 0;
         
         do{
-             System.out.println(" quer jogar contra player ou ocntra pc?");
+             System.out.println(" quer jogar contra player ou contra pc?");
                 System.out.println("Player (1)");
                 System.out.println("PC (2)");
                 valida = ler.nextInt();

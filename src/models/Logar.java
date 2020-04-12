@@ -7,6 +7,9 @@ package models;
 
 import controllers.Jogador;
 import controllers.Jogar;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,28 +19,36 @@ import java.sql.Statement;
  * @author Luiz_
  */
 public class Logar extends Jogador{
-   
-    private String nome;
-    private String senha;
- 
     
-    public void Autenticar() throws SQLException {
+    public void Autenticar(controllers.Jogador jogador) throws SQLException, NoSuchAlgorithmException {
     
         
-       if(super.getNome()!= null && super.getSenha() != null && !super.getNome().isEmpty() && !super.getSenha().isEmpty()){
+        
+       if(jogador.getNome()!= null && jogador.getSenha() != null && !jogador.getNome().isEmpty() && !jogador.getSenha().isEmpty()){
            
             Conexao con = new Conexao();
-            Jogar jogo = new Jogar();
+            Jogar jogo = new Jogar();   
+            
+            MessageDigest senhaCriptografada=MessageDigest.getInstance("MD5");//criptografa a senha
+            
+            byte[] senhabytes = jogador.getSenha().getBytes();
+            senhaCriptografada.update(senhabytes,0,senhabytes.length);
+            BigInteger i = new BigInteger(1,senhaCriptografada.digest());
+            String jujuba = String.format("%1$032X", i);
             Statement st = con.conexao.createStatement();
-            ResultSet rs = st.executeQuery("Select * from jogador where nome_jogador = '" + super.getNome()+"'"
-                                           + "and senha = '"+ super.getSenha()+"'");
+            
+            ResultSet rs = st.executeQuery("Select * from jogador where nome_jogador = '" + jogador.getNome()+"'"
+                                           + "and senha = '"+ jujuba +"'");
             
             while(rs.next()){
-                String jogador = rs.getString("nome_jogador");
+                String usuario = rs.getString("nome_jogador");
                 String senha2 = rs.getString("senha");
-                if((super.getNome() == null ? jogador == null : super.getNome().equals(jogador)) && (super.getSenha() == null ? senha2 == null : super.getSenha().equals(senha2))){
-                    System.out.println("\nLogado com sucesso\n bem vindo " + jogador);
+                
+                if((jogador.getNome() == null ? usuario == null : jogador.getNome().equals(usuario)) && (jogador.getSenha() == null ? senha2 == null : jujuba.equals(senha2))){
+                    System.out.println("\nLogado com sucesso\n bem vindo " + usuario);
                     jogo.entrarJogo();
+                } else {
+                    System.out.println("Nome ou Senha incorretos!!");
                 }
             }   
        } else {
